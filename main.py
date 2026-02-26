@@ -1,6 +1,11 @@
 import anthropic
 import os
+from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
+from rich import print as rprint
 
+console = Console()
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 def get_playlist(mood):
@@ -25,12 +30,24 @@ def get_playlist(mood):
     return message.content[0].text
 
 def main():
-    print("🎵 AI Mood Playlist Curator 🎵")
-    print("--------------------------------")
-    mood = input("How are you feeling right now? ")
-    print("\nGenerating your perfect playlist...\n")
+    console.print(Panel.fit(
+        "[bold magenta]🎵 AI Mood Playlist Curator 🎵[/bold magenta]\n"
+        "[cyan]Powered by Claude AI[/cyan]",
+        border_style="magenta"
+    ))
+    
+    console.print("\n[yellow]How are you feeling right now?[/yellow] ", end="")
+    mood = input()
+    
+    console.print("\n[cyan]✨ Generating your perfect playlist...[/cyan]\n")
+    
     playlist = get_playlist(mood)
-    print(playlist)
+    
+    console.print(Panel(
+        f"[green]{playlist}[/green]",
+        title="[bold magenta]🎵 Your Playlist[/bold magenta]",
+        border_style="cyan"
+    ))
 
 if __name__ == "__main__":
     main()
